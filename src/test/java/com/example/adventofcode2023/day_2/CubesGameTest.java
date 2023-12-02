@@ -34,6 +34,8 @@ class CubesGameTest {
         file = ResourceUtils.getFile("classpath:day_2/input_1.txt");
         Integer result = cubesGame.testDrivenRun(file);
         System.out.println(result);
+        // actual confirmed result
+        assertEquals(2551, result);
     }
 
     @Test
@@ -49,5 +51,7 @@ class CubesGameTest {
         file = ResourceUtils.getFile("classpath:day_2/input_1.txt");
         Integer result = cubesGame.testDrivenRun(file, false);
         System.out.println(result);
+        // actual confirmed result
+        assertEquals(62811, result);
     }
 }
