@@ -16,8 +16,7 @@ public class CubesGame implements TestDriven<Integer> {
     private static final int RED_LIMIT = 12;
     private static final int GREEN_LIMIT = 13;
     private static final int BLUE_LIMIT = 14;
-    private static final String regex = "((?<number>\\d+) (?<colour>blue|red|green))";
-    private static final Pattern pattern = Pattern.compile(regex);
+    private static final Pattern PATTERN = Pattern.compile("((?<number>\\d+) (?<colour>blue|red|green))");
 
     private record GameInstance(int id, List<BagPull> bagPulls) {
         public boolean breaksNoLimits() {
@@ -53,7 +52,7 @@ public class CubesGame implements TestDriven<Integer> {
                 List<String> numsAndColoursStrings = Arrays.asList(cubesFound.split(","));
                 Map<String, Integer> results = new HashMap<>();
                 numsAndColoursStrings.forEach(colourAndNum -> {
-                    Matcher matcher = pattern.matcher(colourAndNum.trim());
+                    Matcher matcher = PATTERN.matcher(colourAndNum.trim());
                     if (matcher.matches()) {
                         results.put(matcher.group("colour"), Integer.parseInt(matcher.group("number")));
                     }

@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.event.annotation.BeforeTestMethod;
 import org.springframework.util.ResourceUtils;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,6 +22,7 @@ class CubesGameTest {
     }
 
     @Test
+    @BeforeTestMethod
     void runTestPartOne() throws IOException {
         testSetup();
         Integer result = cubesGame.testDrivenRun(file);
