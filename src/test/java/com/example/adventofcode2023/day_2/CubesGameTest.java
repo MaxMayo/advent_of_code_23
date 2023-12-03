@@ -16,7 +16,7 @@ class CubesGameTest {
     private TestDriven<Integer> cubesGame;
     private File file;
 
-    public void testSetup() throws FileNotFoundException {
+    private void testSetup() throws FileNotFoundException {
         cubesGame = new CubesGame();
         file = ResourceUtils.getFile("classpath:day_2/test_example.txt");
     }
