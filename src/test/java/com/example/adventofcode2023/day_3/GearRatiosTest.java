@@ -42,6 +42,19 @@ class GearRatiosTest {
     }
 
     @Test
-    void testDrivenRunPart2() {
+    void testDrivenRunPart2() throws IOException {
+        testDrivenSetup();
+        int result = gearRatios.testDrivenRun(file, false);
+        assertEquals(467835, result);
+    }
+
+    @Test
+    void runRealPart2() throws IOException {
+        file = ResourceUtils.getFile("classpath:day_3/input_1.txt");
+        gearRatios = new GearRatios();
+        int result = gearRatios.testDrivenRun(file, false);
+        System.out.println(result);
+        assertEquals(76504829, result);
+
     }
 }
