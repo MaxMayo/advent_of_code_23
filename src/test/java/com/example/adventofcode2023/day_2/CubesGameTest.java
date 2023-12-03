@@ -50,9 +50,36 @@ class CubesGameTest {
     void runRealPartTwo() throws IOException {
         cubesGame = new CubesGame();
         file = ResourceUtils.getFile("classpath:day_2/input_1.txt");
+        Long timeStart = System.currentTimeMillis();
         Integer result = cubesGame.testDrivenRun(file, false);
+        Long timeEnd = System.currentTimeMillis();
+        Long timeTotal = timeEnd - timeStart;
         System.out.println(result);
+        System.out.println("Operation took " + timeTotal + " milliseconds");
         // actual confirmed result
         assertEquals(62811, result);
+    }
+
+    @Test
+    void findShortestAndAverageRunTimes2() throws IOException {
+        long totalMillis = 0;
+        long fastestTime = Long.MAX_VALUE;
+        for(int i = 0; i < 100; i++) {
+            cubesGame = new CubesGame();
+            file = ResourceUtils.getFile("classpath:day_2/input_1.txt");
+            Long timeStart = System.currentTimeMillis();
+            Integer result = cubesGame.testDrivenRun(file, false);
+            Long timeEnd = System.currentTimeMillis();
+            Long timeTotal = timeEnd - timeStart;
+            totalMillis += timeTotal;
+            if (timeTotal < fastestTime) fastestTime = timeTotal;
+            System.out.println(result);
+            System.out.println("Operation took " + timeTotal + " milliseconds");
+            // actual confirmed result
+            assertEquals(62811, result);
+        }
+        System.out.println();
+        System.out.println("Fastest time: " + fastestTime + " milliseconds");
+        System.out.println("Average time: " + totalMillis/100 + "milliseconds");
     }
 }

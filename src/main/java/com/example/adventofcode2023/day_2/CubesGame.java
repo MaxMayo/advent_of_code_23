@@ -20,13 +20,13 @@ public class CubesGame implements TestDriven<Integer> {
 
     private record GameInstance(int id, List<BagPull> bagPulls) {
         public boolean breaksNoLimits() {
-            return bagPulls.stream().noneMatch(BagPull::breaksLimits);
+            return bagPulls.stream().allMatch(BagPull::breaksNoLimits);
         }
     }
 
     private record BagPull(int red, int green, int blue) {
-        public boolean breaksLimits() {
-            return red > RED_LIMIT || green > GREEN_LIMIT || blue > BLUE_LIMIT;
+        public boolean breaksNoLimits() {
+            return red <= RED_LIMIT && green <= GREEN_LIMIT && blue <= BLUE_LIMIT;
         }
     }
 
@@ -71,6 +71,9 @@ public class CubesGame implements TestDriven<Integer> {
     @Override
     public Integer runPartTwo(BufferedReader bufferedReader) {
         return bufferedReader.lines()
+            .toList()
+            .stream()
+            .parallel()
             .map(CubesGame::mapLineToGameInstance)
             .map(CubesGame::mapGameToMinBagPulls)
             .map(bagPull -> bagPull.red * bagPull.green * bagPull.blue)
@@ -82,11 +85,11 @@ public class CubesGame implements TestDriven<Integer> {
         int minRed = 0;
         int minGreen = 0;
         int minBlue = 0;
-        List<BagPull> bagPulls = gameInstance.bagPulls();
+        List<BagPull> bagPulls = gameInstance.bagPulls;
         for (BagPull bagPull : bagPulls) {
-            if (bagPull.red() > minRed) minRed = bagPull.red();
-            if (bagPull.green() > minGreen) minGreen = bagPull.green();
-            if (bagPull.blue() > minBlue) minBlue = bagPull.blue();
+            if (bagPull.red > minRed) minRed = bagPull.red;
+            if (bagPull.green > minGreen) minGreen = bagPull.green;
+            if (bagPull.blue > minBlue) minBlue = bagPull.blue;
         }
         return new BagPull(minRed, minGreen, minBlue);
     }
