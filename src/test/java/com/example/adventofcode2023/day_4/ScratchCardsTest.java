@@ -43,6 +43,6 @@ class ScratchCardsTest {
         TestDriven<Integer> scratchCards = new ScratchCards();
         int result = scratchCards.testDrivenRun(file, false);
         System.out.println(result);
-//        assertEquals(22897, result);
+        assertEquals(5095824, result);
     }
 }
