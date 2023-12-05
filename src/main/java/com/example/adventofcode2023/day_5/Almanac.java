@@ -24,6 +24,20 @@ import com.example.adventofcode2023.common.TestDriven;
 
 public class Almanac implements TestDriven<Long> {
 
+    private static long index = 0;
+    private static long time;
+    private static long totalSeeds = 0;
+    private static void setTotalSeeds(long totalSeeds) {
+        Almanac.totalSeeds = totalSeeds;
+    }
+
+    private static void printIndex() {
+        if((index % 10_000_000) == 0) {
+            System.out.println((double) index/(double) totalSeeds);
+        }
+        index++;
+    }
+
     private static final String REGEX = "(?<destination>\\d+) (?<source>\\d+) (?<range>\\d+)";
     private static final Pattern PATTERN = Pattern.compile(REGEX);
 
@@ -52,8 +66,14 @@ public class Almanac implements TestDriven<Long> {
                 }
             }
 
+            long mapNoCheck(long givenSource) {
+                return destination + givenSource - source;
+            }
+
             boolean hasInRange(long givenSource) {
-                return Range.between(source, source + range - 1).contains(givenSource);
+                return source <= givenSource && (source + range) > givenSource;
+                //that was EXPENSIVE
+//                return Range.between(source, source + range - 1).contains(givenSource);
             }
         }
 
@@ -62,15 +82,10 @@ public class Almanac implements TestDriven<Long> {
         public long getDestination(long givenSource) {
             for (DestSourceRange mapping : mappings) {
                 if (mapping.hasInRange(givenSource)) {
-                    return mapping.map(givenSource);
+                    return mapping.mapNoCheck(givenSource);
                 }
             }
             return givenSource;
-        }
-
-        private boolean sourceKnown(int givenSource) {
-            return true;
-//            return mappings.stream().filter(mapping -> mapping.hasInRange(givenSource)).
         }
     }
 
@@ -185,15 +200,16 @@ public class Almanac implements TestDriven<Long> {
         String[] seedStrings = parts[1].trim().split("\s");
         Arrays.stream(seedStrings).map(Long::parseLong).forEach(seeds::add);
     }
-
     private LongStream seedsListStreamed(String line) {
         System.out.println("Building seed streams");
         String[] stringNums = line.split(":")[1].trim().split("\s");
         List<LongStream> longStreamArray = new ArrayList<>();
         LongStream bigLongStream = null;
+        Long streamLength = 0L;
         for (int i = 0; i < stringNums.length; i+= 2) {
             long start = Long.parseLong(stringNums[i]);
             long range = Long.parseLong(stringNums[i+1]);
+            streamLength += range;
             LongStream longStream = LongStream.range(start, start + range);
             if (bigLongStream == null) {
                 bigLongStream = longStream;
@@ -201,18 +217,10 @@ public class Almanac implements TestDriven<Long> {
                 bigLongStream = LongStream.concat(bigLongStream, longStream);
             }
         }
+        Almanac.totalSeeds = streamLength;
+        System.out.println(streamLength);
         return bigLongStream;
     }
-//    private void populateSeedsList2(String line) {
-//        String[] stringNums = line.split(":")[1].trim().split("\s");
-//        List<LongStream> longStreamArray = new ArrayList<>();
-//        for (int i = 0; i < stringNums.length; i+= 2) {
-//            long start = Long.parseLong(stringNums[i]);
-//            long range = Long.parseLong(stringNums[i+1]);
-//            longStreamArray.add(LongStream.range(start, start + range));
-//        }
-//        longStreamArray.stream().flatMap(Function::identity);
-//    }
 
     @Override
     public Long runPartTwo(BufferedReader bufferedReader) {
@@ -286,36 +294,22 @@ public class Almanac implements TestDriven<Long> {
                 line = bufferedReader.readLine();
                 if(line == null) break;
             }
-            System.out.println("hi");
 
-            long seedWithLowestLocation = 0;
-            long lowestLocation = Long.MAX_VALUE;
+            //trim mappers to only care for ranges catered for all the way through
+
+            //or start from lowest location value in almanac and work up
+
 
             return seedStream.map(seed -> {
-                long soilNumber = soilMapper.getDestination(seed);
-                long fertiliserNumber = fertiliserMapper.getDestination(soilNumber);
-                long waterNumber = waterMapper.getDestination(fertiliserNumber);
-                long lightNumber = lightMapper.getDestination(waterNumber);
-                long temperatureNumber = temperatureMapper.getDestination(lightNumber);
-                long humidityNumber = humidityMapper.getDestination(temperatureNumber);
-                long location = locationMapper.getDestination(humidityNumber);
-                return location;
+                printIndex();
+                return locationMapper.getDestination(
+                    humidityMapper.getDestination(
+                        temperatureMapper.getDestination(
+                            lightMapper.getDestination(
+                                waterMapper.getDestination(
+                                    fertiliserMapper.getDestination(
+                                        soilMapper.getDestination(seed)))))));
             }).reduce(Long.MAX_VALUE, Long::min);
-
-//            for (Long seed : seeds) {
-//                long soilNumber = soilMapper.getDestination(seed);
-//                long fertiliserNumber = fertiliserMapper.getDestination(soilNumber);
-//                long waterNumber = waterMapper.getDestination(fertiliserNumber);
-//                long lightNumber = lightMapper.getDestination(waterNumber);
-//                long temperatureNumber = temperatureMapper.getDestination(lightNumber);
-//                long humidityNumber = humidityMapper.getDestination(temperatureNumber);
-//                long location = locationMapper.getDestination(humidityNumber);
-//                if (location < lowestLocation) {
-//                    lowestLocation = location;
-//                    seedWithLowestLocation = seed;
-//                }
-//            }
-//            return lowestLocation;
 
         } catch (IOException e) {
             throw new RuntimeException(e);

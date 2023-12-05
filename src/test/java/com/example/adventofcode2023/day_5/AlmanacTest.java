@@ -3,6 +3,7 @@ package com.example.adventofcode2023.day_5;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.Duration;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.util.ResourceUtils;
@@ -45,9 +46,14 @@ class AlmanacTest {
 
     @Test
     void realRun2() throws IOException {
+        long timeStart = System.currentTimeMillis();
         File file = ResourceUtils.getFile("classpath:day_5/input.txt");
         almanac = new Almanac();
         var result = almanac.testDrivenRun(file, false);
         System.out.println(result);
-    }
+        long timeEnd = System.currentTimeMillis();
+        var duration = Duration.ofMillis(timeEnd - timeStart);
+        System.out.println("Total run length: " + duration.toString());
+    }.
+
 }
