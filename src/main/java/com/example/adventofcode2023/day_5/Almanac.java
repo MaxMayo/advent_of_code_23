@@ -7,29 +7,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.function.IntSupplier;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.LongStream;
-import java.util.stream.Stream;
-
-import static java.util.stream.LongStream.concat;
-
-import org.apache.commons.lang3.Range;
 
 import com.example.adventofcode2023.common.TestDriven;
 
 public class Almanac implements TestDriven<Long> {
 
     private static long index = 0;
-    private static long time;
     private static long totalSeeds = 0;
-    private static void setTotalSeeds(long totalSeeds) {
-        Almanac.totalSeeds = totalSeeds;
-    }
 
     private static void printIndex() {
         if((index % 10_000_000) == 0) {

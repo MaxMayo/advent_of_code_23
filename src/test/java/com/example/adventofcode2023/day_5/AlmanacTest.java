@@ -54,6 +54,7 @@ class AlmanacTest {
         long timeEnd = System.currentTimeMillis();
         var duration = Duration.ofMillis(timeEnd - timeStart);
         System.out.println("Total run length: " + duration.toString());
+        assertEquals(148041808, result);
     }
 
 }
