@@ -286,7 +286,7 @@ public class Almanac implements TestDriven<Long> {
             //or start from lowest location value in almanac and work up
 
 
-            return seedStream.map(seed -> {
+            return seedStream.parallel().map(seed -> {
                 printIndex();
                 return locationMapper.getDestination(
                     humidityMapper.getDestination(
