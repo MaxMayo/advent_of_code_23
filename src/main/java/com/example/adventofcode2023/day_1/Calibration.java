@@ -3,10 +3,14 @@ package com.example.adventofcode2023.day_1;
 import java.io.BufferedReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import com.example.adventofcode2023.common.TestDriven;
 
 public class Calibration implements TestDriven<Integer> {
+
+    String REGEX = "";
+    Pattern PATTERN = Pattern.compile(REGEX);
 
     private final Map<String, Character> myMap = Map.of(
         "one", '1',
@@ -52,9 +56,7 @@ public class Calibration implements TestDriven<Integer> {
             if (indexOfLastOccurrence != -1) replacementsToMake.put(indexOfLastOccurrence, value);
         });
         char[] charArray = line.toCharArray();
-        replacementsToMake.forEach((index, value) -> {
-            charArray[index] = value;
-        });
+        replacementsToMake.forEach((index, value) -> charArray[index] = value);
         return String.valueOf(charArray);
     }
 }
