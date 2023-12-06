@@ -19,7 +19,7 @@ public class Almanac implements TestDriven<Long> {
 
     private static void printIndex() {
         if((index % 10_000_000) == 0) {
-            System.out.println((double) index/(double) totalSeeds);
+            System.out.println(((double) (index*100)/(double) totalSeeds) + "%");
         }
         index++;
     }
