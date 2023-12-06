@@ -17,6 +17,7 @@ public class Almanac implements TestDriven<Long> {
     private static long index = 0;
     private static long totalSeeds = 0;
 
+    //this does not work when the stream is parallel
     private static void printIndex() {
         if((index % 10_000_000) == 0) {
             System.out.println(((double) (index*100)/(double) totalSeeds) + "%");
