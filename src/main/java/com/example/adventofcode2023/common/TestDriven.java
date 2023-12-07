@@ -11,6 +11,10 @@ public interface TestDriven<R> {
         return testDrivenRun(file, true);
     }
 
+    default R testDrivenRun2(File file) throws IOException {
+        return testDrivenRun(file, false);
+    }
+
     default R testDrivenRun(File file, boolean isPartOne) throws IOException {
         try (
             FileReader fileReader = new FileReader(file);
