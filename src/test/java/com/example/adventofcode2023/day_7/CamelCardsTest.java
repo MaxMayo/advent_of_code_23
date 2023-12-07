@@ -37,7 +37,7 @@ class CamelCardsTest {
     @Test
     void testDrivenRun2() throws IOException {
         var result = testDriven().testDrivenRun2(testFile);
-        assertEquals(0, result);
+        assertEquals(5905, result);
     }
 
     @Test
