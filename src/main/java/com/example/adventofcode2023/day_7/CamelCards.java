@@ -37,7 +37,6 @@ public class CamelCards implements TestDriven<Long> {
                 originalCards.add(String.valueOf(c));
             }
             long numDifferentCards = cards.stream().distinct().count();
-            List<String> differentCards;
             handType = calculateHandType((int) numDifferentCards);
         }
 
@@ -98,7 +97,19 @@ public class CamelCards implements TestDriven<Long> {
                     return cardDifference;
                 }
             }
-            // if not already returned, cards must have been equal by jacked rules.
+            // if not already returned, cards must have been equal ignoring jacked tie-breaker rules.
+            for (int i = 0; i < 5; i++) {
+                String heldCard = this.cards.get(i);
+                String otherCard = other.cards.get(i);
+                if (heldCard.equals(otherCard)) { // both are same, compare them by original card values
+                    heldCard = this.originalCards.get(i);
+                    otherCard = other.originalCards.get(i);
+                }
+                int cardDifference = compareCards(heldCard, otherCard);
+                if (cardDifference != 0) {
+                    return cardDifference;
+                }
+            }
             throw new RuntimeException("hands were completely equal " + this.originalString + " " + other.originalString);
         }
 

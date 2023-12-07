@@ -44,6 +44,8 @@ class CamelCardsTest {
     void runReal2() throws IOException {
         var result = testDriven().testDrivenRun2(realFile);
         System.out.println(result);
+        //too low
+        assertNotEquals(248498444, result);
         assertEquals(0, result);
     }
 }
