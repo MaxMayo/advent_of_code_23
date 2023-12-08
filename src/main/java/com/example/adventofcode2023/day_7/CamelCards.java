@@ -105,7 +105,7 @@ public class CamelCards implements TestDriven<Long> {
                     heldCard = this.originalCards.get(i);
                     otherCard = other.originalCards.get(i);
                 }
-                int cardDifference = compareCards(heldCard, otherCard);
+                int cardDifference = compareCards(heldCard, otherCard, CARDS_ORDERED_BY_STRENGTH_JACKED);
                 if (cardDifference != 0) {
                     return cardDifference;
                 }
@@ -115,8 +115,12 @@ public class CamelCards implements TestDriven<Long> {
 
         //positive if held is "higher" than other
         private int compareCards(String held, String other) {
-            int indexOfHeld = CARDS_ORDERED_BY_STRENGTH.indexOf(held);
-            int indexOfOther = CARDS_ORDERED_BY_STRENGTH.indexOf(other);
+            return compareCards(held, other, CARDS_ORDERED_BY_STRENGTH);
+        }
+
+        private int compareCards(String held, String other, List<String> cardsList) {
+            int indexOfHeld = cardsList.indexOf(held);
+            int indexOfOther = cardsList.indexOf(other);
             return indexOfOther - indexOfHeld;
         }
 
@@ -137,8 +141,8 @@ public class CamelCards implements TestDriven<Long> {
 
             //5 same
             //promote or do nothing
-            if (numDistinctCards == 0) { //AAAAA
-                // already full house, do nothing
+            if (numDistinctCards == 0) { // JJJJJ
+                substituteJs("A");
                 return;
             } else if (numDistinctCards == 1) { //JAAAA, JJAAA, JJJAA, JJJJA
                 // promote to full house

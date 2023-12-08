@@ -2,11 +2,14 @@ package com.example.adventofcode2023.day_7;
 
 import com.example.adventofcode2023.common.TestDriven;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -46,6 +49,14 @@ class CamelCardsTest {
         System.out.println(result);
         //too low
         assertNotEquals(248498444, result);
+        //also too low
+        assertNotEquals(248497444, result);
         assertEquals(0, result);
+    }
+
+    public static Stream<Arguments> promotionArgs() {
+        return Stream.of(
+                Arguments.of("")
+        );
     }
 }
