@@ -79,7 +79,7 @@ public class CamelCards implements TestDriven<Long> {
         private long handScoreDifference(Hand other) {
             long thisRank = handStrengths.indexOf(this.handType);
             long otherRank = handStrengths.indexOf(other.handType);
-            return Math.clamp(otherRank - thisRank, -1, 1);
+            return otherRank - thisRank;
         }
 
         @Override
