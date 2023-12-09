@@ -45,4 +45,13 @@ class NextInSequenceTest {
         var result = nextInSequence.testDrivenRun2(file);
         assertEquals(2, result);
     }
+
+    @Test
+    @SneakyThrows
+    void realRun2() {
+        file = ResourceUtils.getFile("classpath:day_9/input.txt");
+        var result = nextInSequence.testDrivenRun2(file);
+        System.out.println(result);
+        assertEquals(1112, result);
+    }
 }

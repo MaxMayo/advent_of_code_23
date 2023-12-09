@@ -30,6 +30,7 @@ public class NextInSequence implements TestDriven<Long> {
     private static List<List<Long>> findSequences(List<Long> firstRow) {
         int maxDepth = firstRow.size();
         List<List<Long>> sequences = new ArrayList<>(maxDepth);
+        sequences.add(firstRow);
         List<Long> currentSequence = firstRow;
         for (int depth = 1; depth <= maxDepth; depth += 1) {
             int currentSequenceLength = currentSequence.size();
@@ -44,13 +45,25 @@ public class NextInSequence implements TestDriven<Long> {
             if (allAre0) break;
             currentSequence = sequenceDifferences;
         }
-        sequences.add(firstRow);
         return sequences;
     }
 
 
     @Override
     public Long runPartTwo(BufferedReader bufferedReader) {
-        return null;
+        return bufferedReader.lines()
+                .map(line -> line.split("\\s"))
+                .map(
+                        stringArray -> Arrays.stream(stringArray)
+                                .map(Long::parseLong).toList()
+                )
+                .map(NextInSequence::findSequences)
+                .map(listOfSequences -> listOfSequences
+                        .reversed()
+                        .stream()
+                        .map(List::getFirst)
+                        .reduce(0L, (lastPredicted, currentFirst) -> currentFirst - lastPredicted)
+                )
+                .reduce(0L, Long::sum);
     }
 }
