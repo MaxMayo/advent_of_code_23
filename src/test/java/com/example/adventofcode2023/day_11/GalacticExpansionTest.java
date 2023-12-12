@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class GalacticExpansionTest {
 
     File file;
-    TestDriven<Integer> galacticExpansion;
+    TestDriven<Long> galacticExpansion;
 
 
     @Test
@@ -29,15 +29,13 @@ class GalacticExpansionTest {
 
     @Test
     @SneakyThrows
-    void testDrivenRun() {
+    void testDrivenRun2() {
         file = ResourceUtils.getFile("classpath:day_11/input.txt");
         galacticExpansion = new GalacticExpansion();
 
-        var result = galacticExpansion.testDrivenRun(file);
-        System.out.println(result);
-    }
+        var result = galacticExpansion.testDrivenRun2(file);
 
-    @Test
-    void testDrivenRun2() {
+        assertEquals(635_832_237_682L, result);
+        System.out.println(result);
     }
 }

@@ -13,18 +13,16 @@ import java.util.List;
 @Getter
 public class UniverseMap {
     private List<List<String>> map;
+    private List<Integer> columnsWhereExpanded = new ArrayList<>();
+    private List<Integer> rowsWhereExpanded = new ArrayList<>();
 
     private static int numGalaxies = 0;
 
     public UniverseMap(List<List<String>> map) {
         this.map = map;
-//        applyNumberToGalaxies();
         expandUniverse();
     }
 
-     private void applyNumberToGalaxies() {
-        this.map.forEach(list -> list.replaceAll(string -> string.equals("#") ? String.valueOf(numGalaxies++) : string));
-    }
 
     public List<Point> getGalaxyLocations() {
         List<Point> locations = new ArrayList<>();
@@ -35,39 +33,44 @@ public class UniverseMap {
     }
 
     private void mapIterator(TriConsumer<Integer, Integer, String> codeBlock) {
-        for (int column = 0; column < map.getFirst().size(); column++) {
-            for (int row = 0; row < map.size(); row++) {
+        for (int row = 0; row < map.size(); row++) {
+            for (int column = 0; column < map.getFirst().size(); column++) {
                 codeBlock.accept(row, column, map.get(row).get(column));
             }
         }
     }
 
     private void expandUniverse() {
-        //rows
-        List<Integer> whereToInsertNewRows = new ArrayList<>();
         for (int i = 0; i < map.size(); i++) {
-            if(map.get(i).stream().allMatch("."::equals)) {
-                whereToInsertNewRows.add(i);
+            if (map.get(i).stream().allMatch("."::equals)) {
+                rowsWhereExpanded.add(i);
             }
         }
-        List<Integer> whereToInsertNewColumns = new ArrayList<>();
         for (int column = 0; column < map.getFirst().size(); column++) {
             boolean columnIsEmpty = true;
             for (int row = 0; row < map.size(); row++) {
-                if(!map.get(row).get(column).equals(".")) columnIsEmpty = false;
+                if (!map.get(row).get(column).equals(".")) columnIsEmpty = false;
             }
-            if (columnIsEmpty) whereToInsertNewColumns.add(column);
+            if (columnIsEmpty) columnsWhereExpanded.add(column);
         }
-
-        //insert new columns first
-        whereToInsertNewColumns.reversed().forEach(columnIndex -> {
-            map.forEach(innerList -> innerList.add(columnIndex, "."));
-        });
-        int rowLength = this.map.getFirst().size();
-
-        whereToInsertNewRows.reversed().forEach(rowIndex -> {
-            map.add(rowIndex, new ArrayList<>(Collections.nCopies(rowLength, ".")));
-        });
     }
+
+    public Integer distanceBetweenGalaxies(Point a, Point b, int expansionCoefficient) {
+        int leftMost = Math.min(a.x, b.x);
+        int rightMost = Math.max(a.x, b.x);
+        int highest = Math.min(a.y, b.y);
+        int lowest = Math.max(a.y, b.y);
+        int columnExpansionsCrossed = (int) columnsWhereExpanded.stream()
+                .filter(columnIndex -> columnIndex < rightMost && columnIndex > leftMost)
+                .count();
+        int rowExpansionsCrossed = (int) rowsWhereExpanded.stream()
+                .filter(rowIndex -> rowIndex > highest && rowIndex < lowest)
+                .count();
+
+        int distWhereExpansionsIgnored = Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+        int distMinusExpansions = distWhereExpansionsIgnored - columnExpansionsCrossed - rowExpansionsCrossed;
+        return distMinusExpansions + ((columnExpansionsCrossed + rowExpansionsCrossed) * expansionCoefficient);
+    }
+
 
 }
