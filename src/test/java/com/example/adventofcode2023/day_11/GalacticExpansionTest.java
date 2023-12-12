@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
-import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,4 +37,5 @@ class GalacticExpansionTest {
         assertEquals(635_832_237_682L, result);
         System.out.println(result);
     }
+
 }
